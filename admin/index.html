@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Room Uploader</title>
+</head>
+<body>
+  <h2>Upload a New Room</h2>
+  <form id="uploadForm">
+    <input type="text" name="slug" placeholder="Room Slug (e.g. soft-cell)" required><br>
+    <input type="text" name="name" placeholder="Room Name" required><br>
+    <input type="text" name="artist" placeholder="Artist Name" required><br>
+    <input type="file" name="thumbnail" accept="image/*" required><br>
+    <input type="file" name="roomzip" accept=".zip" required><br>
+    <button type="submit">Upload</button>
+  </form>
+
+  <div id="status"></div>
+
+  <script>
+    const form = document.getElementById('uploadForm');
+    const status = document.getElementById('status');
+
+    form.onsubmit = async (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+
+      const res = await fetch('/.netlify/functions/uploadRoom', {
+        method: 'POST',
+        body: data
+      });
+
+      const text = await res.text();
+      status.innerText = text;
+    };
+  </script>
+</body>
+</html>
